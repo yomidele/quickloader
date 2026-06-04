@@ -1,29 +1,41 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useEffect } from "react";
+import { Logo } from "@/components/Logo";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Your App" },
-      { name: "description", content: "Replace this with a one-sentence description of your app." },
-      { property: "og:title", content: "Your App" },
-      { property: "og:description", content: "Replace this with a one-sentence description of your app." },
+      { title: "QuickLoad — Fast. Simple. Reliable." },
+      { name: "description", content: "Buy airtime, data, pay bills and more — instantly." },
     ],
   }),
-  component: Index,
+  component: Splash,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
-function Index() {
+function Splash() {
+  const navigate = useNavigate();
+  useEffect(() => {
+    const t = setTimeout(() => navigate({ to: "/onboarding" }), 2400);
+    return () => clearTimeout(t);
+  }, [navigate]);
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
+    <div className="min-h-dvh gradient-primary relative overflow-hidden">
+      <div className="absolute -top-32 -left-20 w-80 h-80 rounded-full bg-white/10 blur-3xl" />
+      <div className="absolute -bottom-32 -right-20 w-96 h-96 rounded-full bg-white/10 blur-3xl" />
+      <div className="app-shell !bg-transparent flex flex-col items-center justify-center text-center px-6">
+        <div className="animate-pop-in">
+          <Logo size="lg" invert />
+        </div>
+        <p className="mt-4 text-white/85 text-sm font-medium tracking-wide">
+          Fast. Simple. Reliable.
+        </p>
+        <div className="absolute bottom-16 left-0 right-0 px-12">
+          <div className="h-1 rounded-full bg-white/20 overflow-hidden">
+            <div className="h-full bg-white rounded-full animate-progress-load" />
+          </div>
+          <p className="mt-3 text-[11px] text-white/70">Loading your experience…</p>
+        </div>
+      </div>
     </div>
   );
 }
