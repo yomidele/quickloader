@@ -9,15 +9,59 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as WalletRouteImport } from './routes/wallet'
+import { Route as TvRouteImport } from './routes/tv'
+import { Route as SuccessRouteImport } from './routes/success'
 import { Route as SignupRouteImport } from './routes/signup'
+import { Route as ServicesRouteImport } from './routes/services'
+import { Route as ReferRouteImport } from './routes/refer'
+import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as OtpRouteImport } from './routes/otp'
 import { Route as OnboardingRouteImport } from './routes/onboarding'
+import { Route as NotificationsRouteImport } from './routes/notifications'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as HistoryRouteImport } from './routes/history'
+import { Route as FailedRouteImport } from './routes/failed'
+import { Route as ElectricityRouteImport } from './routes/electricity'
+import { Route as DataRouteImport } from './routes/data'
+import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as ConfirmRouteImport } from './routes/confirm'
+import { Route as AirtimeRouteImport } from './routes/airtime'
 import { Route as IndexRouteImport } from './routes/index'
 
+const WalletRoute = WalletRouteImport.update({
+  id: '/wallet',
+  path: '/wallet',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TvRoute = TvRouteImport.update({
+  id: '/tv',
+  path: '/tv',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SuccessRoute = SuccessRouteImport.update({
+  id: '/success',
+  path: '/success',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
   path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ServicesRoute = ServicesRouteImport.update({
+  id: '/services',
+  path: '/services',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReferRoute = ReferRouteImport.update({
+  id: '/refer',
+  path: '/refer',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfileRoute = ProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
   getParentRoute: () => rootRouteImport,
 } as any)
 const OtpRoute = OtpRouteImport.update({
@@ -30,9 +74,49 @@ const OnboardingRoute = OnboardingRouteImport.update({
   path: '/onboarding',
   getParentRoute: () => rootRouteImport,
 } as any)
+const NotificationsRoute = NotificationsRouteImport.update({
+  id: '/notifications',
+  path: '/notifications',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HistoryRoute = HistoryRouteImport.update({
+  id: '/history',
+  path: '/history',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FailedRoute = FailedRouteImport.update({
+  id: '/failed',
+  path: '/failed',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ElectricityRoute = ElectricityRouteImport.update({
+  id: '/electricity',
+  path: '/electricity',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DataRoute = DataRouteImport.update({
+  id: '/data',
+  path: '/data',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ConfirmRoute = ConfirmRouteImport.update({
+  id: '/confirm',
+  path: '/confirm',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AirtimeRoute = AirtimeRouteImport.update({
+  id: '/airtime',
+  path: '/airtime',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -43,49 +127,205 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/airtime': typeof AirtimeRoute
+  '/confirm': typeof ConfirmRoute
+  '/dashboard': typeof DashboardRoute
+  '/data': typeof DataRoute
+  '/electricity': typeof ElectricityRoute
+  '/failed': typeof FailedRoute
+  '/history': typeof HistoryRoute
   '/login': typeof LoginRoute
+  '/notifications': typeof NotificationsRoute
   '/onboarding': typeof OnboardingRoute
   '/otp': typeof OtpRoute
+  '/profile': typeof ProfileRoute
+  '/refer': typeof ReferRoute
+  '/services': typeof ServicesRoute
   '/signup': typeof SignupRoute
+  '/success': typeof SuccessRoute
+  '/tv': typeof TvRoute
+  '/wallet': typeof WalletRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/airtime': typeof AirtimeRoute
+  '/confirm': typeof ConfirmRoute
+  '/dashboard': typeof DashboardRoute
+  '/data': typeof DataRoute
+  '/electricity': typeof ElectricityRoute
+  '/failed': typeof FailedRoute
+  '/history': typeof HistoryRoute
   '/login': typeof LoginRoute
+  '/notifications': typeof NotificationsRoute
   '/onboarding': typeof OnboardingRoute
   '/otp': typeof OtpRoute
+  '/profile': typeof ProfileRoute
+  '/refer': typeof ReferRoute
+  '/services': typeof ServicesRoute
   '/signup': typeof SignupRoute
+  '/success': typeof SuccessRoute
+  '/tv': typeof TvRoute
+  '/wallet': typeof WalletRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/airtime': typeof AirtimeRoute
+  '/confirm': typeof ConfirmRoute
+  '/dashboard': typeof DashboardRoute
+  '/data': typeof DataRoute
+  '/electricity': typeof ElectricityRoute
+  '/failed': typeof FailedRoute
+  '/history': typeof HistoryRoute
   '/login': typeof LoginRoute
+  '/notifications': typeof NotificationsRoute
   '/onboarding': typeof OnboardingRoute
   '/otp': typeof OtpRoute
+  '/profile': typeof ProfileRoute
+  '/refer': typeof ReferRoute
+  '/services': typeof ServicesRoute
   '/signup': typeof SignupRoute
+  '/success': typeof SuccessRoute
+  '/tv': typeof TvRoute
+  '/wallet': typeof WalletRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login' | '/onboarding' | '/otp' | '/signup'
+  fullPaths:
+    | '/'
+    | '/airtime'
+    | '/confirm'
+    | '/dashboard'
+    | '/data'
+    | '/electricity'
+    | '/failed'
+    | '/history'
+    | '/login'
+    | '/notifications'
+    | '/onboarding'
+    | '/otp'
+    | '/profile'
+    | '/refer'
+    | '/services'
+    | '/signup'
+    | '/success'
+    | '/tv'
+    | '/wallet'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/onboarding' | '/otp' | '/signup'
-  id: '__root__' | '/' | '/login' | '/onboarding' | '/otp' | '/signup'
+  to:
+    | '/'
+    | '/airtime'
+    | '/confirm'
+    | '/dashboard'
+    | '/data'
+    | '/electricity'
+    | '/failed'
+    | '/history'
+    | '/login'
+    | '/notifications'
+    | '/onboarding'
+    | '/otp'
+    | '/profile'
+    | '/refer'
+    | '/services'
+    | '/signup'
+    | '/success'
+    | '/tv'
+    | '/wallet'
+  id:
+    | '__root__'
+    | '/'
+    | '/airtime'
+    | '/confirm'
+    | '/dashboard'
+    | '/data'
+    | '/electricity'
+    | '/failed'
+    | '/history'
+    | '/login'
+    | '/notifications'
+    | '/onboarding'
+    | '/otp'
+    | '/profile'
+    | '/refer'
+    | '/services'
+    | '/signup'
+    | '/success'
+    | '/tv'
+    | '/wallet'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AirtimeRoute: typeof AirtimeRoute
+  ConfirmRoute: typeof ConfirmRoute
+  DashboardRoute: typeof DashboardRoute
+  DataRoute: typeof DataRoute
+  ElectricityRoute: typeof ElectricityRoute
+  FailedRoute: typeof FailedRoute
+  HistoryRoute: typeof HistoryRoute
   LoginRoute: typeof LoginRoute
+  NotificationsRoute: typeof NotificationsRoute
   OnboardingRoute: typeof OnboardingRoute
   OtpRoute: typeof OtpRoute
+  ProfileRoute: typeof ProfileRoute
+  ReferRoute: typeof ReferRoute
+  ServicesRoute: typeof ServicesRoute
   SignupRoute: typeof SignupRoute
+  SuccessRoute: typeof SuccessRoute
+  TvRoute: typeof TvRoute
+  WalletRoute: typeof WalletRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/wallet': {
+      id: '/wallet'
+      path: '/wallet'
+      fullPath: '/wallet'
+      preLoaderRoute: typeof WalletRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tv': {
+      id: '/tv'
+      path: '/tv'
+      fullPath: '/tv'
+      preLoaderRoute: typeof TvRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/success': {
+      id: '/success'
+      path: '/success'
+      fullPath: '/success'
+      preLoaderRoute: typeof SuccessRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/signup': {
       id: '/signup'
       path: '/signup'
       fullPath: '/signup'
       preLoaderRoute: typeof SignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/services': {
+      id: '/services'
+      path: '/services'
+      fullPath: '/services'
+      preLoaderRoute: typeof ServicesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/refer': {
+      id: '/refer'
+      path: '/refer'
+      fullPath: '/refer'
+      preLoaderRoute: typeof ReferRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/otp': {
@@ -102,11 +342,67 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OnboardingRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/notifications': {
+      id: '/notifications'
+      path: '/notifications'
+      fullPath: '/notifications'
+      preLoaderRoute: typeof NotificationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/login': {
       id: '/login'
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/history': {
+      id: '/history'
+      path: '/history'
+      fullPath: '/history'
+      preLoaderRoute: typeof HistoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/failed': {
+      id: '/failed'
+      path: '/failed'
+      fullPath: '/failed'
+      preLoaderRoute: typeof FailedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/electricity': {
+      id: '/electricity'
+      path: '/electricity'
+      fullPath: '/electricity'
+      preLoaderRoute: typeof ElectricityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/data': {
+      id: '/data'
+      path: '/data'
+      fullPath: '/data'
+      preLoaderRoute: typeof DataRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/confirm': {
+      id: '/confirm'
+      path: '/confirm'
+      fullPath: '/confirm'
+      preLoaderRoute: typeof ConfirmRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/airtime': {
+      id: '/airtime'
+      path: '/airtime'
+      fullPath: '/airtime'
+      preLoaderRoute: typeof AirtimeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -121,10 +417,24 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AirtimeRoute: AirtimeRoute,
+  ConfirmRoute: ConfirmRoute,
+  DashboardRoute: DashboardRoute,
+  DataRoute: DataRoute,
+  ElectricityRoute: ElectricityRoute,
+  FailedRoute: FailedRoute,
+  HistoryRoute: HistoryRoute,
   LoginRoute: LoginRoute,
+  NotificationsRoute: NotificationsRoute,
   OnboardingRoute: OnboardingRoute,
   OtpRoute: OtpRoute,
+  ProfileRoute: ProfileRoute,
+  ReferRoute: ReferRoute,
+  ServicesRoute: ServicesRoute,
   SignupRoute: SignupRoute,
+  SuccessRoute: SuccessRoute,
+  TvRoute: TvRoute,
+  WalletRoute: WalletRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
