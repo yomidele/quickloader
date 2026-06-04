@@ -40,7 +40,7 @@ function Signup() {
         <p className="mt-1 text-sm text-muted-foreground">Join thousands topping up the smart way.</p>
 
         <form
-          onSubmit={(e) => { e.preventDefault(); navigate({ to: "/otp" }); }}
+          onSubmit={(e) => { e.preventDefault(); navigate({ to: "/dashboard" }); }}
           className="mt-6 space-y-4"
         >
           <Field icon={User} label="Full Name" placeholder="John Adeyemi" />
