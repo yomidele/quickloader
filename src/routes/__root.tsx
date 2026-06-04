@@ -77,14 +77,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
+      { title: "Quick load" },
+      { name: "description", content: "QuickLoad is a mobile app for instant airtime top-ups, bill payments, and financial management." },
       { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { property: "og:title", content: "Quick load" },
+      { property: "og:description", content: "QuickLoad is a mobile app for instant airtime top-ups, bill payments, and financial management." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:title", content: "Quick load" },
+      { name: "twitter:description", content: "QuickLoad is a mobile app for instant airtime top-ups, bill payments, and financial management." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/07f2ad1f-ed71-4b48-994f-b2203eac0d21/id-preview-503567e3--433d63d9-9dd8-4d87-bd7f-0fce5fc76059.lovable.app-1780603002467.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/07f2ad1f-ed71-4b48-994f-b2203eac0d21/id-preview-503567e3--433d63d9-9dd8-4d87-bd7f-0fce5fc76059.lovable.app-1780603002467.png" },
     ],
     links: [
       {
