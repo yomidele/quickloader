@@ -1,16 +1,32 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, useMemo } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { PageHeader } from "@/components/PageHeader";
-import { networks, dataPlans } from "@/lib/quickload";
+import { Skeleton } from "@/components/ui/skeleton";
+import { networks } from "@/lib/quickload";
+import { getDataPlans } from "@/lib/cheapdatahub.functions";
 
 export const Route = createFileRoute("/data")({ component: Data });
 
+type Network = "mtn" | "glo" | "airtel" | "9mobile";
+
 function Data() {
   const navigate = useNavigate();
-  const [net, setNet] = useState("mtn");
-  const [plan, setPlan] = useState(2);
+  const [net, setNet] = useState<Network>("mtn");
+  const [planId, setPlanId] = useState<number | null>(null);
   const [phone, setPhone] = useState("0803 000 0000");
-  const selected = dataPlans.find((p) => p.id === plan)!;
+
+  const { data, isLoading, isError, refetch } = useQuery({
+    queryKey: ["data-plans", net],
+    queryFn: () => getDataPlans({ data: { network: net } }),
+    staleTime: 5 * 60 * 1000,
+  });
+
+  const plans = data?.plans ?? [];
+  const selected = useMemo(
+    () => plans.find((p) => p.plan_id === planId) ?? plans[0],
+    [plans, planId],
+  );
   const network = networks.find((n) => n.id === net)!;
 
   return (
@@ -24,7 +40,7 @@ function Data() {
               {networks.map((n) => (
                 <button
                   key={n.id}
-                  onClick={() => setNet(n.id)}
+                  onClick={() => { setNet(n.id as Network); setPlanId(null); }}
                   className={`flex items-center gap-2 pl-1.5 pr-4 py-1.5 rounded-full border-2 transition flex-shrink-0 ${
                     net === n.id ? "border-primary bg-accent" : "border-border bg-background"
                   }`}
@@ -49,25 +65,55 @@ function Data() {
           </div>
 
           <div>
-            <p className="text-xs font-medium text-muted-foreground mb-2">Select Plan</p>
-            <div className="grid grid-cols-2 gap-3">
-              {dataPlans.map((p) => {
-                const active = plan === p.id;
-                return (
-                  <button
-                    key={p.id}
-                    onClick={() => setPlan(p.id)}
-                    className={`text-left p-3 rounded-2xl border-2 transition ${
-                      active ? "border-primary bg-accent shadow-soft" : "border-border bg-background"
-                    }`}
-                  >
-                    <p className={`text-lg font-bold ${active ? "text-primary" : ""}`}>{p.size}</p>
-                    <p className="text-[11px] text-muted-foreground">{p.validity}</p>
-                    <p className="mt-2 text-sm font-bold">₦{p.price.toLocaleString()}</p>
-                  </button>
-                );
-              })}
+            <div className="flex items-center justify-between mb-2">
+              <p className="text-xs font-medium text-muted-foreground">Select Plan</p>
+              <p className="text-[10px] text-muted-foreground">Live pricing · CheapDataHub</p>
             </div>
+
+            {isLoading && (
+              <div className="grid grid-cols-2 gap-3">
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <Skeleton key={i} className="h-24 rounded-2xl" />
+                ))}
+              </div>
+            )}
+
+            {isError && (
+              <div className="bg-background rounded-2xl p-4 border border-destructive/30 text-center">
+                <p className="text-sm font-semibold text-destructive">Couldn't load plans</p>
+                <button onClick={() => refetch()} className="mt-2 text-xs font-semibold text-primary underline">
+                  Try again
+                </button>
+              </div>
+            )}
+
+            {!isLoading && !isError && plans.length === 0 && (
+              <div className="bg-background rounded-2xl p-6 text-center">
+                <p className="text-sm font-semibold">No plans available</p>
+                <p className="mt-1 text-xs text-muted-foreground">Pick another network.</p>
+              </div>
+            )}
+
+            {!isLoading && !isError && plans.length > 0 && (
+              <div className="grid grid-cols-2 gap-3">
+                {plans.map((p) => {
+                  const active = (selected?.plan_id ?? null) === p.plan_id;
+                  return (
+                    <button
+                      key={p.plan_id}
+                      onClick={() => setPlanId(p.plan_id)}
+                      className={`text-left p-3 rounded-2xl border-2 transition ${
+                        active ? "border-primary bg-accent shadow-soft" : "border-border bg-background"
+                      }`}
+                    >
+                      <p className={`text-base font-bold ${active ? "text-primary" : ""}`}>{p.size}</p>
+                      <p className="text-[11px] text-muted-foreground">{p.validity} · {p.type}</p>
+                      <p className="mt-2 text-sm font-bold">₦{p.price.toLocaleString()}</p>
+                    </button>
+                  );
+                })}
+              </div>
+            )}
           </div>
 
           <label className="flex items-center justify-between bg-background rounded-2xl shadow-card p-4 text-sm">
@@ -79,16 +125,19 @@ function Data() {
             <p className="text-xs font-semibold text-muted-foreground mb-2">Summary</p>
             <Row k="Network" v={network.name} />
             <Row k="Number" v={phone} />
-            <Row k="Plan" v={`${selected.size} · ${selected.validity}`} />
+            <Row k="Plan" v={selected ? `${selected.size} · ${selected.validity}` : "—"} />
             <div className="mt-2 pt-3 border-t border-border flex justify-between">
               <span className="text-sm font-semibold">Total</span>
-              <span className="text-base font-bold text-primary">₦{selected.price.toLocaleString()}</span>
+              <span className="text-base font-bold text-primary">
+                ₦{(selected?.price ?? 0).toLocaleString()}
+              </span>
             </div>
           </div>
 
           <button
-            onClick={() => navigate({ to: "/confirm" })}
-            className="w-full gradient-primary text-primary-foreground rounded-full py-4 text-sm font-semibold shadow-glow active:scale-[0.98]"
+            onClick={() => selected && navigate({ to: "/confirm" })}
+            disabled={!selected}
+            className="w-full gradient-primary text-primary-foreground rounded-full py-4 text-sm font-semibold shadow-glow active:scale-[0.98] disabled:opacity-50"
           >
             Proceed
           </button>
