@@ -24,7 +24,7 @@ export function WalletCard({ balance = 152340.5 }: { balance?: number }) {
             {show ? balance.toLocaleString("en-NG", { minimumFractionDigits: 2 }) : "••••••"}
           </span>
         </div>
-        <p className="mt-1 text-[11px] opacity-75">Account: 8012•••456 · QuickLoad MFB</p>
+        <p className="mt-1 text-[11px] opacity-75">Account: 8012•••456 · Al-Malami MFB</p>
         <div className="mt-5 grid grid-cols-2 gap-3">
           <button className="glass rounded-full py-2.5 text-sm font-semibold flex items-center justify-center gap-1.5 active:scale-95 transition">
             <Plus size={16} /> Fund Wallet
