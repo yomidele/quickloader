@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { Bell, Smartphone, Wifi, Tv, Zap, Send, History, Gift, LifeBuoy, ArrowRight, Loader2 } from "lucide-react";
 import { WalletCard } from "@/components/WalletCard";
 import { BottomNav } from "@/components/BottomNav";
@@ -29,6 +29,7 @@ function greeting() {
 function Dashboard() {
   const { user, loading } = useRequireAuth();
   const { data: profile } = useProfile(user?.id);
+  const navigate = useNavigate();
 
   if (loading || !user) {
     return (
@@ -59,7 +60,7 @@ function Dashboard() {
           </Link>
         </header>
 
-        <div className="px-5"><WalletCard balance={Number(profile?.wallet_balance ?? 0)} /></div>
+        <div className="px-5"><WalletCard balance={Number(profile?.wallet_balance ?? 0)} onFund={() => navigate({ to: "/wallet" })} onWithdraw={() => navigate({ to: "/wallet" })} /></div>
 
         <section className="px-5 mt-7">
           <div className="flex items-center justify-between mb-3">
