@@ -55,7 +55,7 @@ function WalletPage() {
               <div className="mt-4 space-y-3">
                 <Field label="Bank Name" value="Wema Bank" />
                 <Field label="Account Number" value="8012345678" onCopy={() => copy("8012345678")} copied={copied} />
-                <Field label="Account Name" value="QuickLoad / John Adeyemi" />
+                <Field label="Account Name" value="Al-Malami / John Adeyemi" />
               </div>
               <button className="mt-5 w-full gradient-primary text-primary-foreground rounded-full py-3.5 text-sm font-semibold shadow-glow active:scale-[0.98]">
                 I&apos;ve sent the money

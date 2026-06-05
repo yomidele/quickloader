@@ -5,7 +5,7 @@ import { Logo } from "@/components/Logo";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "QuickLoad — Fast. Simple. Reliable." },
+      { title: "Al-Malami — Fast. Simple. Reliable." },
       { name: "description", content: "Buy airtime, data, pay bills and more — instantly." },
     ],
   }),

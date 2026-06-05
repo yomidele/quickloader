@@ -64,7 +64,7 @@ function Profile() {
               <span className="flex-1 text-sm font-semibold text-destructive">Logout</span>
             </button>
           </div>
-          <p className="mt-6 mb-2 text-center text-[11px] text-muted-foreground">QuickLoad v1.0.0</p>
+          <p className="mt-6 mb-2 text-center text-[11px] text-muted-foreground">Al-Malami v1.0.0</p>
         </div>
 
         <BottomNav />

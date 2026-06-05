@@ -13,7 +13,7 @@ function Login() {
       <div className="app-shell px-6 py-10">
         <div className="flex justify-center mb-8"><Logo /></div>
         <h1 className="text-2xl font-bold">Welcome back</h1>
-        <p className="mt-1 text-sm text-muted-foreground">Sign in to continue to QuickLoad.</p>
+        <p className="mt-1 text-sm text-muted-foreground">Sign in to continue to Al-Malami.</p>
 
         <form
           onSubmit={(e) => { e.preventDefault(); navigate({ to: "/dashboard" }); }}

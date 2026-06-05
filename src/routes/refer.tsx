@@ -56,7 +56,7 @@ function Refer() {
             <ol className="mt-3 space-y-3">
               {[
                 "Share your unique referral code with friends.",
-                "They sign up using your code on QuickLoad.",
+                "They sign up using your code on Al-Malami.",
                 "You earn ₦500 once they complete their first transaction.",
               ].map((s, i) => (
                 <li key={i} className="flex items-start gap-3">
