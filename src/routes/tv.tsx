@@ -1,18 +1,34 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { CheckCircle2, Tv } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
 import { PageHeader } from "@/components/PageHeader";
-import { tvProviders, tvPackages } from "@/lib/quickload";
+import { Skeleton } from "@/components/ui/skeleton";
+import { tvProviders } from "@/lib/quickload";
+import { getCablePlans } from "@/lib/cheapdatahub.functions";
 
 export const Route = createFileRoute("/tv")({ component: TV });
 
+type Provider = "dstv" | "gotv" | "startimes";
+
 function TV() {
   const navigate = useNavigate();
-  const [provider, setProvider] = useState("dstv");
-  const [pkg, setPkg] = useState("compact");
+  const [provider, setProvider] = useState<Provider>("dstv");
+  const [planId, setPlanId] = useState<number | null>(null);
   const [card, setCard] = useState("");
   const [verified, setVerified] = useState(false);
-  const selected = tvPackages.find((p) => p.id === pkg)!;
+
+  const { data, isLoading, isError, refetch } = useQuery({
+    queryKey: ["cable-plans", provider],
+    queryFn: () => getCablePlans({ data: { provider } }),
+    staleTime: 5 * 60 * 1000,
+  });
+
+  const plans = data?.plans ?? [];
+  const selected = useMemo(
+    () => plans.find((p) => p.plan_id === planId) ?? plans[0],
+    [plans, planId],
+  );
   const prov = tvProviders.find((p) => p.id === provider)!;
 
   return (
@@ -26,7 +42,7 @@ function TV() {
               {tvProviders.map((p) => (
                 <button
                   key={p.id}
-                  onClick={() => setProvider(p.id)}
+                  onClick={() => { setProvider(p.id as Provider); setPlanId(null); }}
                   className={`p-4 rounded-2xl border-2 transition flex flex-col items-center gap-2 ${
                     provider === p.id ? "border-primary bg-accent" : "border-border bg-background"
                   }`}
@@ -67,43 +83,72 @@ function TV() {
           </div>
 
           <div>
-            <p className="text-xs font-medium text-muted-foreground mb-2">Select Package</p>
-            <div className="bg-background rounded-2xl shadow-card divide-y divide-border/60">
-              {tvPackages.map((p) => (
-                <button
-                  key={p.id}
-                  onClick={() => setPkg(p.id)}
-                  className="w-full flex items-center justify-between p-4 text-left active:bg-surface-muted"
-                >
-                  <div>
-                    <p className="text-sm font-semibold">{p.name}</p>
-                    <p className="text-[11px] text-muted-foreground">Monthly subscription</p>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <p className="text-sm font-bold">₦{p.price.toLocaleString()}</p>
-                    <span className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${pkg === p.id ? "border-primary bg-primary" : "border-border"}`}>
-                      {pkg === p.id && <span className="w-2 h-2 rounded-full bg-white" />}
-                    </span>
-                  </div>
-                </button>
-              ))}
+            <div className="flex items-center justify-between mb-2">
+              <p className="text-xs font-medium text-muted-foreground">Select Package</p>
+              <p className="text-[10px] text-muted-foreground">Live pricing</p>
             </div>
+
+            {isLoading && (
+              <div className="bg-background rounded-2xl shadow-card divide-y divide-border/60">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <div key={i} className="p-4"><Skeleton className="h-6 w-full" /></div>
+                ))}
+              </div>
+            )}
+
+            {isError && (
+              <div className="bg-background rounded-2xl p-4 border border-destructive/30 text-center">
+                <p className="text-sm font-semibold text-destructive">Couldn't load packages</p>
+                <button onClick={() => refetch()} className="mt-2 text-xs font-semibold text-primary underline">
+                  Try again
+                </button>
+              </div>
+            )}
+
+            {!isLoading && !isError && plans.length > 0 && (
+              <div className="bg-background rounded-2xl shadow-card divide-y divide-border/60">
+                {plans.map((p) => {
+                  const active = (selected?.plan_id ?? null) === p.plan_id;
+                  return (
+                    <button
+                      key={p.plan_id}
+                      onClick={() => setPlanId(p.plan_id)}
+                      className="w-full flex items-center justify-between p-4 text-left active:bg-surface-muted"
+                    >
+                      <div>
+                        <p className="text-sm font-semibold">{p.name}</p>
+                        <p className="text-[11px] text-muted-foreground">Subscription</p>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <p className="text-sm font-bold">₦{p.price.toLocaleString()}</p>
+                        <span className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${active ? "border-primary bg-primary" : "border-border"}`}>
+                          {active && <span className="w-2 h-2 rounded-full bg-white" />}
+                        </span>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            )}
           </div>
 
           <div className="bg-background rounded-2xl shadow-card p-4 border border-accent">
             <p className="text-xs font-semibold text-muted-foreground mb-2">Summary</p>
             <Row k="Provider" v={prov.name} />
             <Row k="Smart Card" v={card || "—"} />
-            <Row k="Package" v={selected.name} />
+            <Row k="Package" v={selected?.name ?? "—"} />
             <div className="mt-2 pt-3 border-t border-border flex justify-between">
               <span className="text-sm font-semibold">Total</span>
-              <span className="text-base font-bold text-primary">₦{selected.price.toLocaleString()}</span>
+              <span className="text-base font-bold text-primary">
+                ₦{(selected?.price ?? 0).toLocaleString()}
+              </span>
             </div>
           </div>
 
           <button
-            onClick={() => navigate({ to: "/confirm" })}
-            className="w-full gradient-primary text-primary-foreground rounded-full py-4 text-sm font-semibold shadow-glow active:scale-[0.98]"
+            onClick={() => selected && navigate({ to: "/confirm" })}
+            disabled={!selected}
+            className="w-full gradient-primary text-primary-foreground rounded-full py-4 text-sm font-semibold shadow-glow active:scale-[0.98] disabled:opacity-50"
           >
             Proceed
           </button>
