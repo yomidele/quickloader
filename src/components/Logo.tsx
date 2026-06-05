@@ -16,7 +16,7 @@ export function Logo({ size = "md", invert = false }: { size?: "sm" | "md" | "lg
         <Zap size={sizes.icon} strokeWidth={2.5} fill="currentColor" />
       </div>
       <span className={`${sizes.text} font-extrabold tracking-tight ${invert ? "text-white" : "text-foreground"}`}>
-        Quick<span className={invert ? "text-white/80" : "text-primary"}>Load</span>
+        Al-<span className={invert ? "text-white/80" : "text-primary"}>Malami</span>
       </span>
     </div>
   );
