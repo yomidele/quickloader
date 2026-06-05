@@ -26,10 +26,17 @@ function b64urlDecode(s: string): Uint8Array {
   return out;
 }
 
-function randomBytes(len: number): Uint8Array {
-  const a = new Uint8Array(len);
+function randomBytes(len: number): Uint8Array<ArrayBuffer> {
+  const buf = new ArrayBuffer(len);
+  const a = new Uint8Array(buf);
   crypto.getRandomValues(a);
-  return a;
+  return a as Uint8Array<ArrayBuffer>;
+}
+
+function toArrayBuffer(u8: Uint8Array): ArrayBuffer {
+  const out = new ArrayBuffer(u8.byteLength);
+  new Uint8Array(out).set(u8);
+  return out;
 }
 
 export function isWebAuthnSupported(): boolean {
@@ -98,7 +105,7 @@ export async function registerBiometric(username: string): Promise<StoredCredent
 
   const stored: StoredCredential = {
     credentialId: b64urlEncode(cred.rawId),
-    userHandle: b64urlEncode(userHandle.buffer),
+    userHandle: b64urlEncode(userHandle.buffer as ArrayBuffer),
     username,
     enrolledAt: Date.now(),
   };
@@ -120,7 +127,7 @@ export async function authenticateBiometric(): Promise<StoredCredential> {
       allowCredentials: [
         {
           type: "public-key",
-          id: b64urlDecode(stored.credentialId),
+          id: toArrayBuffer(b64urlDecode(stored.credentialId)),
           transports: ["internal"],
         },
       ],
