@@ -11,21 +11,28 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WalletRouteImport } from './routes/wallet'
 import { Route as TvRouteImport } from './routes/tv'
+import { Route as TermsRouteImport } from './routes/terms'
 import { Route as SuccessRouteImport } from './routes/success'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as ReferRouteImport } from './routes/refer'
 import { Route as ProfileRouteImport } from './routes/profile'
+import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as OtpRouteImport } from './routes/otp'
 import { Route as OnboardingRouteImport } from './routes/onboarding'
 import { Route as NotificationsRouteImport } from './routes/notifications'
+import { Route as NotificationSettingsRouteImport } from './routes/notification-settings'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as HistoryRouteImport } from './routes/history'
+import { Route as HelpRouteImport } from './routes/help'
 import { Route as FailedRouteImport } from './routes/failed'
 import { Route as ElectricityRouteImport } from './routes/electricity'
+import { Route as EditProfileRouteImport } from './routes/edit-profile'
 import { Route as DataRouteImport } from './routes/data'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as ConfirmRouteImport } from './routes/confirm'
+import { Route as ChangePinRouteImport } from './routes/change-pin'
+import { Route as ChangePasswordRouteImport } from './routes/change-password'
 import { Route as AirtimeRouteImport } from './routes/airtime'
 import { Route as IndexRouteImport } from './routes/index'
 
@@ -37,6 +44,11 @@ const WalletRoute = WalletRouteImport.update({
 const TvRoute = TvRouteImport.update({
   id: '/tv',
   path: '/tv',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TermsRoute = TermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SuccessRoute = SuccessRouteImport.update({
@@ -64,6 +76,11 @@ const ProfileRoute = ProfileRouteImport.update({
   path: '/profile',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const OtpRoute = OtpRouteImport.update({
   id: '/otp',
   path: '/otp',
@@ -79,6 +96,11 @@ const NotificationsRoute = NotificationsRouteImport.update({
   path: '/notifications',
   getParentRoute: () => rootRouteImport,
 } as any)
+const NotificationSettingsRoute = NotificationSettingsRouteImport.update({
+  id: '/notification-settings',
+  path: '/notification-settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
@@ -89,6 +111,11 @@ const HistoryRoute = HistoryRouteImport.update({
   path: '/history',
   getParentRoute: () => rootRouteImport,
 } as any)
+const HelpRoute = HelpRouteImport.update({
+  id: '/help',
+  path: '/help',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const FailedRoute = FailedRouteImport.update({
   id: '/failed',
   path: '/failed',
@@ -97,6 +124,11 @@ const FailedRoute = FailedRouteImport.update({
 const ElectricityRoute = ElectricityRouteImport.update({
   id: '/electricity',
   path: '/electricity',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EditProfileRoute = EditProfileRouteImport.update({
+  id: '/edit-profile',
+  path: '/edit-profile',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DataRoute = DataRouteImport.update({
@@ -114,6 +146,16 @@ const ConfirmRoute = ConfirmRouteImport.update({
   path: '/confirm',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ChangePinRoute = ChangePinRouteImport.update({
+  id: '/change-pin',
+  path: '/change-pin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ChangePasswordRoute = ChangePasswordRouteImport.update({
+  id: '/change-password',
+  path: '/change-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AirtimeRoute = AirtimeRouteImport.update({
   id: '/airtime',
   path: '/airtime',
@@ -128,42 +170,56 @@ const IndexRoute = IndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/airtime': typeof AirtimeRoute
+  '/change-password': typeof ChangePasswordRoute
+  '/change-pin': typeof ChangePinRoute
   '/confirm': typeof ConfirmRoute
   '/dashboard': typeof DashboardRoute
   '/data': typeof DataRoute
+  '/edit-profile': typeof EditProfileRoute
   '/electricity': typeof ElectricityRoute
   '/failed': typeof FailedRoute
+  '/help': typeof HelpRoute
   '/history': typeof HistoryRoute
   '/login': typeof LoginRoute
+  '/notification-settings': typeof NotificationSettingsRoute
   '/notifications': typeof NotificationsRoute
   '/onboarding': typeof OnboardingRoute
   '/otp': typeof OtpRoute
+  '/privacy': typeof PrivacyRoute
   '/profile': typeof ProfileRoute
   '/refer': typeof ReferRoute
   '/services': typeof ServicesRoute
   '/signup': typeof SignupRoute
   '/success': typeof SuccessRoute
+  '/terms': typeof TermsRoute
   '/tv': typeof TvRoute
   '/wallet': typeof WalletRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/airtime': typeof AirtimeRoute
+  '/change-password': typeof ChangePasswordRoute
+  '/change-pin': typeof ChangePinRoute
   '/confirm': typeof ConfirmRoute
   '/dashboard': typeof DashboardRoute
   '/data': typeof DataRoute
+  '/edit-profile': typeof EditProfileRoute
   '/electricity': typeof ElectricityRoute
   '/failed': typeof FailedRoute
+  '/help': typeof HelpRoute
   '/history': typeof HistoryRoute
   '/login': typeof LoginRoute
+  '/notification-settings': typeof NotificationSettingsRoute
   '/notifications': typeof NotificationsRoute
   '/onboarding': typeof OnboardingRoute
   '/otp': typeof OtpRoute
+  '/privacy': typeof PrivacyRoute
   '/profile': typeof ProfileRoute
   '/refer': typeof ReferRoute
   '/services': typeof ServicesRoute
   '/signup': typeof SignupRoute
   '/success': typeof SuccessRoute
+  '/terms': typeof TermsRoute
   '/tv': typeof TvRoute
   '/wallet': typeof WalletRoute
 }
@@ -171,21 +227,28 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/airtime': typeof AirtimeRoute
+  '/change-password': typeof ChangePasswordRoute
+  '/change-pin': typeof ChangePinRoute
   '/confirm': typeof ConfirmRoute
   '/dashboard': typeof DashboardRoute
   '/data': typeof DataRoute
+  '/edit-profile': typeof EditProfileRoute
   '/electricity': typeof ElectricityRoute
   '/failed': typeof FailedRoute
+  '/help': typeof HelpRoute
   '/history': typeof HistoryRoute
   '/login': typeof LoginRoute
+  '/notification-settings': typeof NotificationSettingsRoute
   '/notifications': typeof NotificationsRoute
   '/onboarding': typeof OnboardingRoute
   '/otp': typeof OtpRoute
+  '/privacy': typeof PrivacyRoute
   '/profile': typeof ProfileRoute
   '/refer': typeof ReferRoute
   '/services': typeof ServicesRoute
   '/signup': typeof SignupRoute
   '/success': typeof SuccessRoute
+  '/terms': typeof TermsRoute
   '/tv': typeof TvRoute
   '/wallet': typeof WalletRoute
 }
@@ -194,63 +257,84 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/airtime'
+    | '/change-password'
+    | '/change-pin'
     | '/confirm'
     | '/dashboard'
     | '/data'
+    | '/edit-profile'
     | '/electricity'
     | '/failed'
+    | '/help'
     | '/history'
     | '/login'
+    | '/notification-settings'
     | '/notifications'
     | '/onboarding'
     | '/otp'
+    | '/privacy'
     | '/profile'
     | '/refer'
     | '/services'
     | '/signup'
     | '/success'
+    | '/terms'
     | '/tv'
     | '/wallet'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/airtime'
+    | '/change-password'
+    | '/change-pin'
     | '/confirm'
     | '/dashboard'
     | '/data'
+    | '/edit-profile'
     | '/electricity'
     | '/failed'
+    | '/help'
     | '/history'
     | '/login'
+    | '/notification-settings'
     | '/notifications'
     | '/onboarding'
     | '/otp'
+    | '/privacy'
     | '/profile'
     | '/refer'
     | '/services'
     | '/signup'
     | '/success'
+    | '/terms'
     | '/tv'
     | '/wallet'
   id:
     | '__root__'
     | '/'
     | '/airtime'
+    | '/change-password'
+    | '/change-pin'
     | '/confirm'
     | '/dashboard'
     | '/data'
+    | '/edit-profile'
     | '/electricity'
     | '/failed'
+    | '/help'
     | '/history'
     | '/login'
+    | '/notification-settings'
     | '/notifications'
     | '/onboarding'
     | '/otp'
+    | '/privacy'
     | '/profile'
     | '/refer'
     | '/services'
     | '/signup'
     | '/success'
+    | '/terms'
     | '/tv'
     | '/wallet'
   fileRoutesById: FileRoutesById
@@ -258,21 +342,28 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AirtimeRoute: typeof AirtimeRoute
+  ChangePasswordRoute: typeof ChangePasswordRoute
+  ChangePinRoute: typeof ChangePinRoute
   ConfirmRoute: typeof ConfirmRoute
   DashboardRoute: typeof DashboardRoute
   DataRoute: typeof DataRoute
+  EditProfileRoute: typeof EditProfileRoute
   ElectricityRoute: typeof ElectricityRoute
   FailedRoute: typeof FailedRoute
+  HelpRoute: typeof HelpRoute
   HistoryRoute: typeof HistoryRoute
   LoginRoute: typeof LoginRoute
+  NotificationSettingsRoute: typeof NotificationSettingsRoute
   NotificationsRoute: typeof NotificationsRoute
   OnboardingRoute: typeof OnboardingRoute
   OtpRoute: typeof OtpRoute
+  PrivacyRoute: typeof PrivacyRoute
   ProfileRoute: typeof ProfileRoute
   ReferRoute: typeof ReferRoute
   ServicesRoute: typeof ServicesRoute
   SignupRoute: typeof SignupRoute
   SuccessRoute: typeof SuccessRoute
+  TermsRoute: typeof TermsRoute
   TvRoute: typeof TvRoute
   WalletRoute: typeof WalletRoute
 }
@@ -291,6 +382,13 @@ declare module '@tanstack/react-router' {
       path: '/tv'
       fullPath: '/tv'
       preLoaderRoute: typeof TvRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/terms': {
+      id: '/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/success': {
@@ -328,6 +426,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProfileRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/otp': {
       id: '/otp'
       path: '/otp'
@@ -349,6 +454,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NotificationsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/notification-settings': {
+      id: '/notification-settings'
+      path: '/notification-settings'
+      fullPath: '/notification-settings'
+      preLoaderRoute: typeof NotificationSettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/login': {
       id: '/login'
       path: '/login'
@@ -363,6 +475,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HistoryRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/help': {
+      id: '/help'
+      path: '/help'
+      fullPath: '/help'
+      preLoaderRoute: typeof HelpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/failed': {
       id: '/failed'
       path: '/failed'
@@ -375,6 +494,13 @@ declare module '@tanstack/react-router' {
       path: '/electricity'
       fullPath: '/electricity'
       preLoaderRoute: typeof ElectricityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/edit-profile': {
+      id: '/edit-profile'
+      path: '/edit-profile'
+      fullPath: '/edit-profile'
+      preLoaderRoute: typeof EditProfileRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/data': {
@@ -398,6 +524,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ConfirmRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/change-pin': {
+      id: '/change-pin'
+      path: '/change-pin'
+      fullPath: '/change-pin'
+      preLoaderRoute: typeof ChangePinRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/change-password': {
+      id: '/change-password'
+      path: '/change-password'
+      fullPath: '/change-password'
+      preLoaderRoute: typeof ChangePasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/airtime': {
       id: '/airtime'
       path: '/airtime'
@@ -418,21 +558,28 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AirtimeRoute: AirtimeRoute,
+  ChangePasswordRoute: ChangePasswordRoute,
+  ChangePinRoute: ChangePinRoute,
   ConfirmRoute: ConfirmRoute,
   DashboardRoute: DashboardRoute,
   DataRoute: DataRoute,
+  EditProfileRoute: EditProfileRoute,
   ElectricityRoute: ElectricityRoute,
   FailedRoute: FailedRoute,
+  HelpRoute: HelpRoute,
   HistoryRoute: HistoryRoute,
   LoginRoute: LoginRoute,
+  NotificationSettingsRoute: NotificationSettingsRoute,
   NotificationsRoute: NotificationsRoute,
   OnboardingRoute: OnboardingRoute,
   OtpRoute: OtpRoute,
+  PrivacyRoute: PrivacyRoute,
   ProfileRoute: ProfileRoute,
   ReferRoute: ReferRoute,
   ServicesRoute: ServicesRoute,
   SignupRoute: SignupRoute,
   SuccessRoute: SuccessRoute,
+  TermsRoute: TermsRoute,
   TvRoute: TvRoute,
   WalletRoute: WalletRoute,
 }

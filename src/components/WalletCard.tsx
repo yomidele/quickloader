@@ -1,7 +1,15 @@
 import { useState } from "react";
 import { Eye, EyeOff, Plus, ArrowDownToLine } from "lucide-react";
 
-export function WalletCard({ balance = 152340.5 }: { balance?: number }) {
+export function WalletCard({
+  balance = 0,
+  onFund,
+  onWithdraw,
+}: {
+  balance?: number;
+  onFund?: () => void;
+  onWithdraw?: () => void;
+}) {
   const [show, setShow] = useState(true);
   return (
     <div className="relative gradient-primary text-primary-foreground rounded-3xl p-5 overflow-hidden shadow-glow">
@@ -21,15 +29,21 @@ export function WalletCard({ balance = 152340.5 }: { balance?: number }) {
         <div className="mt-2 flex items-baseline gap-1">
           <span className="text-sm opacity-80">₦</span>
           <span className="text-3xl font-bold tracking-tight">
-            {show ? balance.toLocaleString("en-NG", { minimumFractionDigits: 2 }) : "••••••"}
+            {show ? Number(balance).toLocaleString("en-NG", { minimumFractionDigits: 2 }) : "••••••"}
           </span>
         </div>
-        <p className="mt-1 text-[11px] opacity-75">Account: 8012•••456 · Al-Malami MFB</p>
+        <p className="mt-1 text-[11px] opacity-75">Al-Malami Wallet</p>
         <div className="mt-5 grid grid-cols-2 gap-3">
-          <button className="glass rounded-full py-2.5 text-sm font-semibold flex items-center justify-center gap-1.5 active:scale-95 transition">
+          <button
+            onClick={onFund}
+            className="glass rounded-full py-2.5 text-sm font-semibold flex items-center justify-center gap-1.5 active:scale-95 transition"
+          >
             <Plus size={16} /> Fund Wallet
           </button>
-          <button className="bg-white/95 text-primary-deep rounded-full py-2.5 text-sm font-semibold flex items-center justify-center gap-1.5 active:scale-95 transition">
+          <button
+            onClick={onWithdraw}
+            className="bg-white/95 text-primary-deep rounded-full py-2.5 text-sm font-semibold flex items-center justify-center gap-1.5 active:scale-95 transition"
+          >
             <ArrowDownToLine size={16} /> Withdraw
           </button>
         </div>

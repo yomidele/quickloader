@@ -1,9 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Bell, Smartphone, Wifi, Tv, Zap, Send, History, Gift, LifeBuoy, ArrowRight } from "lucide-react";
+import { Bell, Smartphone, Wifi, Tv, Zap, Send, History, Gift, LifeBuoy, ArrowRight, Loader2 } from "lucide-react";
 import { WalletCard } from "@/components/WalletCard";
 import { BottomNav } from "@/components/BottomNav";
 import { StatusBadge } from "@/components/StatusBadge";
 import { transactions, formatNaira } from "@/lib/quickload";
+import { initials, useProfile, useRequireAuth } from "@/lib/auth";
 
 export const Route = createFileRoute("/dashboard")({ component: Dashboard });
 
@@ -15,19 +16,41 @@ const services = [
   { to: "/services", Icon: Send, label: "Send Money", tint: "bg-pink-50 text-pink-600" },
   { to: "/history", Icon: History, label: "History", tint: "bg-slate-100 text-slate-700" },
   { to: "/refer", Icon: Gift, label: "Refer & Earn", tint: "bg-yellow-50 text-yellow-700" },
-  { to: "/profile", Icon: LifeBuoy, label: "Support", tint: "bg-emerald-50 text-emerald-700" },
+  { to: "/help", Icon: LifeBuoy, label: "Support", tint: "bg-emerald-50 text-emerald-700" },
 ] as const;
 
+function greeting() {
+  const h = new Date().getHours();
+  if (h < 12) return "Good Morning";
+  if (h < 17) return "Good Afternoon";
+  return "Good Evening";
+}
+
 function Dashboard() {
+  const { user, loading } = useRequireAuth();
+  const { data: profile } = useProfile(user?.id);
+
+  if (loading || !user) {
+    return (
+      <div className="min-h-dvh flex items-center justify-center bg-surface">
+        <Loader2 className="animate-spin text-primary" />
+      </div>
+    );
+  }
+
+  const displayName = profile?.full_name || user.email?.split("@")[0] || "User";
+
   return (
     <div className="min-h-dvh bg-surface">
       <div className="app-shell !bg-surface">
         <header className="px-5 pt-6 pb-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-full gradient-primary text-primary-foreground flex items-center justify-center font-bold">JA</div>
+            <div className="w-11 h-11 rounded-full gradient-primary text-primary-foreground flex items-center justify-center font-bold">
+              {initials(displayName)}
+            </div>
             <div>
-              <p className="text-xs text-muted-foreground">Good Morning 👋</p>
-              <p className="text-sm font-semibold">John Adeyemi</p>
+              <p className="text-xs text-muted-foreground">{greeting()} 👋</p>
+              <p className="text-sm font-semibold">{displayName}</p>
             </div>
           </div>
           <Link to="/notifications" className="relative w-11 h-11 rounded-full bg-background shadow-soft flex items-center justify-center">
@@ -36,7 +59,7 @@ function Dashboard() {
           </Link>
         </header>
 
-        <div className="px-5"><WalletCard /></div>
+        <div className="px-5"><WalletCard balance={Number(profile?.wallet_balance ?? 0)} /></div>
 
         <section className="px-5 mt-7">
           <div className="flex items-center justify-between mb-3">

@@ -15,8 +15,15 @@ export const Route = createFileRoute("/")({
 function Splash() {
   const navigate = useNavigate();
   useEffect(() => {
-    const t = setTimeout(() => navigate({ to: "/onboarding" }), 2400);
-    return () => clearTimeout(t);
+    let cancelled = false;
+    (async () => {
+      const { supabase } = await import("@/integrations/supabase/client");
+      const { data } = await supabase.auth.getSession();
+      if (cancelled) return;
+      const dest = data.session ? "/dashboard" : "/onboarding";
+      setTimeout(() => { if (!cancelled) navigate({ to: dest, replace: true }); }, 1800);
+    })();
+    return () => { cancelled = true; };
   }, [navigate]);
   return (
     <div className="min-h-dvh gradient-primary relative overflow-hidden">
