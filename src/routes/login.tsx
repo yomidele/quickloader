@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { Eye, EyeOff, Phone, Lock, Fingerprint, ShieldCheck, X } from "lucide-react";
 import { Logo } from "@/components/Logo";
 import {
@@ -30,7 +30,7 @@ function Login() {
 
   const finishLogin = () => navigate({ to: "/dashboard" });
 
-  const handlePasswordSubmit = async (e: React.FormEvent) => {
+  const handlePasswordSubmit = async (e: FormEvent) => {
     e.preventDefault();
     // Password login succeeded (stub). Offer biometric enrollment if supported & not yet enrolled.
     if (bioAvailable && !getStoredBiometric()) {
