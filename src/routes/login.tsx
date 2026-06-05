@@ -30,7 +30,7 @@ function Login() {
 
   const finishLogin = () => navigate({ to: "/dashboard" });
 
-  const handlePasswordSubmit = async (e: React.FormEvent) => {
+  const handlePasswordSubmit = async (e: FormEvent) => {
     e.preventDefault();
     // Password login succeeded (stub). Offer biometric enrollment if supported & not yet enrolled.
     if (bioAvailable && !getStoredBiometric()) {
