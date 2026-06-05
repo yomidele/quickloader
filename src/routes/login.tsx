@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { Eye, EyeOff, Phone, Lock, Fingerprint, ShieldCheck, X } from "lucide-react";
 import { Logo } from "@/components/Logo";
 import {
