@@ -8,6 +8,7 @@ type StoredCredential = {
   userHandle: string; // base64url
   username: string;
   enrolledAt: number;
+  refreshToken?: string;
 };
 
 function b64urlEncode(buf: ArrayBuffer): string {
@@ -70,6 +71,13 @@ export function getStoredBiometric(): StoredCredential | null {
 export function clearBiometric(): void {
   if (typeof window === "undefined") return;
   localStorage.removeItem(STORAGE_KEY);
+}
+
+export function saveBiometricRefreshToken(refreshToken: string): void {
+  const stored = getStoredBiometric();
+  if (!stored) return;
+  stored.refreshToken = refreshToken;
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(stored));
 }
 
 export async function registerBiometric(username: string): Promise<StoredCredential> {
