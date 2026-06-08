@@ -1,16 +1,20 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState, type FormEvent } from "react";
 import { Loader2, X, AlertCircle } from "lucide-react";
+import { useServerFn } from "@tanstack/react-start";
 import { WalletCard } from "@/components/WalletCard";
 import { BottomNav } from "@/components/BottomNav";
 import { StatusBadge } from "@/components/StatusBadge";
 import { transactions, formatNaira } from "@/lib/quickload";
 import { useProfile, useRequireAuth } from "@/lib/auth";
+import { initiateWalletFunding } from "@/lib/wallet.functions";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/wallet")({ component: WalletPage });
 
-const QUICK_AMOUNTS = [1000, 2000, 5000, 10000];
+const QUICK_AMOUNTS = [500, 1000, 2000, 5000];
+const FUNDING_FEE = 35;
+const MIN_FUND = 200;
 
 function WalletPage() {
   const { user, loading } = useRequireAuth();
@@ -18,6 +22,8 @@ function WalletPage() {
   const [fundOpen, setFundOpen] = useState(false);
   const [withdrawOpen, setWithdrawOpen] = useState(false);
   const [amount, setAmount] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const startFunding = useServerFn(initiateWalletFunding);
 
   if (loading || !user) {
     return (
@@ -37,12 +43,19 @@ function WalletPage() {
     setWithdrawOpen(true);
   };
 
-  const submitFund = (e: FormEvent) => {
+  const submitFund = async (e: FormEvent) => {
     e.preventDefault();
     const amt = Number(amount);
-    if (!amt || amt < 100) return toast.error("Minimum fund amount is ₦100");
-    setFundOpen(false);
-    toast.info("Payment gateway not yet integrated. Funding requests are pending setup.");
+    if (!amt || amt < MIN_FUND) return toast.error(`Minimum funding amount is ₦${MIN_FUND}`);
+    setSubmitting(true);
+    try {
+      const res = await startFunding({ data: { amount: amt } });
+      localStorage.setItem("pending_funding_ref", res.reference);
+      window.location.href = res.authorizationUrl;
+    } catch (err) {
+      toast.error((err as Error).message ?? "Could not start payment");
+      setSubmitting(false);
+    }
   };
 
   const submitWithdraw = (e: FormEvent) => {
@@ -75,9 +88,9 @@ function WalletPage() {
               <AlertCircle size={18} />
             </div>
             <div>
-              <p className="text-sm font-semibold">Payment gateway integration pending</p>
+              <p className="text-sm font-semibold">Secure payments via Paystack</p>
               <p className="text-xs text-muted-foreground mt-0.5">
-                Funding and withdrawals will be available once the payment provider is connected.
+                A ₦{FUNDING_FEE} transaction fee applies to every funding. Minimum funding is ₦{MIN_FUND}.
               </p>
             </div>
           </div>
@@ -106,14 +119,12 @@ function WalletPage() {
       </div>
 
       {fundOpen && (
-        <AmountSheet
-          title="Fund Wallet"
-          description="Enter the amount you'd like to add. Payment options coming soon."
+        <FundSheet
           amount={amount}
           setAmount={setAmount}
-          onClose={() => setFundOpen(false)}
+          onClose={() => !submitting && setFundOpen(false)}
           onSubmit={submitFund}
-          ctaLabel="Continue"
+          submitting={submitting}
         />
       )}
       {withdrawOpen && (
@@ -127,6 +138,89 @@ function WalletPage() {
           ctaLabel="Request Withdrawal"
         />
       )}
+    </div>
+  );
+}
+
+function FundSheet({
+  amount, setAmount, onClose, onSubmit, submitting,
+}: {
+  amount: string;
+  setAmount: (v: string) => void;
+  onClose: () => void;
+  onSubmit: (e: FormEvent) => void;
+  submitting: boolean;
+}) {
+  const amt = Number(amount) || 0;
+  const total = amt > 0 ? amt + FUNDING_FEE : 0;
+  const belowMin = amt > 0 && amt < MIN_FUND;
+  const disabled = submitting || amt < MIN_FUND;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/60 px-4 py-6">
+      <form onSubmit={onSubmit} className="w-full max-w-sm bg-background rounded-3xl p-6 shadow-2xl relative">
+        <button type="button" onClick={onClose} className="absolute right-4 top-4 text-muted-foreground" aria-label="Close" disabled={submitting}>
+          <X size={18} />
+        </button>
+        <h2 className="text-lg font-bold">Fund Wallet</h2>
+        <p className="mt-1 text-sm text-muted-foreground">
+          Pay securely with Paystack. Minimum ₦{MIN_FUND}.
+        </p>
+
+        <label className="block mt-5">
+          <span className="text-xs font-medium text-muted-foreground">Amount to credit (₦)</span>
+          <input
+            inputMode="numeric"
+            value={amount}
+            onChange={(e) => setAmount(e.target.value.replace(/[^0-9]/g, ""))}
+            placeholder="0"
+            className="mt-1.5 w-full h-14 px-4 rounded-xl bg-surface border border-border text-xl font-bold focus:outline-none focus:border-primary"
+            disabled={submitting}
+          />
+        </label>
+
+        <div className="mt-3 grid grid-cols-4 gap-2">
+          {QUICK_AMOUNTS.map((q) => (
+            <button
+              key={q}
+              type="button"
+              onClick={() => setAmount(String(q))}
+              className="py-2 rounded-full bg-surface text-xs font-semibold border border-border active:bg-accent"
+              disabled={submitting}
+            >
+              ₦{q.toLocaleString()}
+            </button>
+          ))}
+        </div>
+
+        <div className="mt-5 rounded-2xl bg-surface border border-border p-4 text-sm">
+          <Row label="Amount to credit" value={formatNaira(amt)} />
+          <Row label="Transaction fee" value={`₦${FUNDING_FEE}`} muted />
+          <div className="h-px bg-border my-2" />
+          <Row label="Total charged" value={formatNaira(total)} bold />
+        </div>
+
+        {belowMin && (
+          <p className="mt-2 text-xs text-destructive">Minimum funding amount is ₦{MIN_FUND}</p>
+        )}
+
+        <button
+          type="submit"
+          disabled={disabled}
+          className="mt-6 w-full gradient-primary text-primary-foreground rounded-full py-3.5 text-sm font-semibold shadow-glow active:scale-[0.98] disabled:opacity-50 flex items-center justify-center gap-2"
+        >
+          {submitting ? <><Loader2 size={16} className="animate-spin" /> Redirecting…</> : `Pay ${formatNaira(total)} with Paystack`}
+        </button>
+      </form>
+    </div>
+  );
+}
+
+function Row({ label, value, bold, muted }: { label: string; value: string; bold?: boolean; muted?: boolean }) {
+  return (
+    <div className="flex items-center justify-between py-1">
+      <span className={muted ? "text-muted-foreground text-xs" : "text-xs text-muted-foreground"}>{label}</span>
+      <span className={bold ? "font-bold" : "font-semibold"}>{value}</span>
     </div>
   );
 }
