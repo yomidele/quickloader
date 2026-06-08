@@ -44,12 +44,104 @@ export type Database = {
         }
         Relationships: []
       }
+      transactions: {
+        Row: {
+          api_price: number | null
+          charged_price: number
+          created_at: string
+          description: string | null
+          id: string
+          metadata: Json | null
+          platform_profit: number | null
+          reference: string | null
+          status: string
+          type: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          api_price?: number | null
+          charged_price: number
+          created_at?: string
+          description?: string | null
+          id?: string
+          metadata?: Json | null
+          platform_profit?: number | null
+          reference?: string | null
+          status?: string
+          type: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          api_price?: number | null
+          charged_price?: number
+          created_at?: string
+          description?: string | null
+          id?: string
+          metadata?: Json | null
+          platform_profit?: number | null
+          reference?: string | null
+          status?: string
+          type?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      wallet_fundings: {
+        Row: {
+          amount: number
+          created_at: string
+          fee: number
+          id: string
+          paystack_access_code: string | null
+          paystack_reference: string
+          status: string
+          total_charged: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          fee?: number
+          id?: string
+          paystack_access_code?: string | null
+          paystack_reference: string
+          status?: string
+          total_charged: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          fee?: number
+          id?: string
+          paystack_access_code?: string | null
+          paystack_reference?: string
+          status?: string
+          total_charged?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      credit_wallet_funding: {
+        Args: { _reference: string }
+        Returns: {
+          amount: number
+          funding_id: string
+          status: string
+          user_id: string
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never

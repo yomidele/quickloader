@@ -1,9 +1,12 @@
 // Server-only helper for the CheapDataHub VTU API.
 // Plan catalog mirrors https://www.cheapdatahub.ng/api/plan-ids/ (public, maintained
-// by the provider). Cost prices below are wholesale; retail price applies markup.
+// by the provider). Cost prices below are wholesale; retail price applies a flat
+// ₦50 markup that the platform keeps as profit on every transaction.
 
 export type Network = "mtn" | "glo" | "airtel" | "9mobile";
 export type CableProvider = "dstv" | "gotv" | "startimes";
+
+export const PLATFORM_MARKUP = 50; // flat ₦50 profit per VTU transaction
 
 export interface DataPlan {
   plan_id: number;
@@ -11,8 +14,8 @@ export interface DataPlan {
   size: string;
   validity: string;
   type: string;
-  cost: number;
-  price: number;
+  cost: number;   // real CheapDataHub price (api_price) — server-only
+  price: number;  // marked-up price shown to user (charged_price)
 }
 
 export interface CablePlan {
@@ -23,10 +26,7 @@ export interface CablePlan {
   price: number;
 }
 
-const DATA_MARKUP = 0.06; // 6% retail markup
-const CABLE_MARKUP = 0.02; // 2% retail markup
-
-const retail = (cost: number, m: number) => Math.ceil((cost * (1 + m)) / 5) * 5;
+const retail = (cost: number) => cost + PLATFORM_MARKUP;
 
 const RAW_DATA: Omit<DataPlan, "price">[] = [
   // AIRTEL
@@ -112,14 +112,14 @@ const RAW_CABLE: Omit<CablePlan, "price">[] = [
 export function listDataPlans(network?: Network): DataPlan[] {
   return RAW_DATA
     .filter((p) => !network || p.network === network)
-    .map((p) => ({ ...p, price: retail(p.cost, DATA_MARKUP) }))
+    .map((p) => ({ ...p, price: retail(p.cost) }))
     .sort((a, b) => a.price - b.price);
 }
 
 export function listCablePlans(provider?: CableProvider): CablePlan[] {
   return RAW_CABLE
     .filter((p) => !provider || p.provider === provider)
-    .map((p) => ({ ...p, price: retail(p.cost, CABLE_MARKUP) }))
+    .map((p) => ({ ...p, price: retail(p.cost) }))
     .sort((a, b) => a.price - b.price);
 }
 

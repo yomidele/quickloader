@@ -18,6 +18,7 @@ import { Route as ServicesRouteImport } from './routes/services'
 import { Route as ReferRouteImport } from './routes/refer'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as PaymentPendingRouteImport } from './routes/payment-pending'
 import { Route as OtpRouteImport } from './routes/otp'
 import { Route as OnboardingRouteImport } from './routes/onboarding'
 import { Route as NotificationsRouteImport } from './routes/notifications'
@@ -35,6 +36,7 @@ import { Route as ChangePinRouteImport } from './routes/change-pin'
 import { Route as ChangePasswordRouteImport } from './routes/change-password'
 import { Route as AirtimeRouteImport } from './routes/airtime'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApiPublicPaystackWebhookRouteImport } from './routes/api/public/paystack-webhook'
 
 const WalletRoute = WalletRouteImport.update({
   id: '/wallet',
@@ -79,6 +81,11 @@ const ProfileRoute = ProfileRouteImport.update({
 const PrivacyRoute = PrivacyRouteImport.update({
   id: '/privacy',
   path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PaymentPendingRoute = PaymentPendingRouteImport.update({
+  id: '/payment-pending',
+  path: '/payment-pending',
   getParentRoute: () => rootRouteImport,
 } as any)
 const OtpRoute = OtpRouteImport.update({
@@ -166,6 +173,12 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicPaystackWebhookRoute =
+  ApiPublicPaystackWebhookRouteImport.update({
+    id: '/api/public/paystack-webhook',
+    path: '/api/public/paystack-webhook',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -185,6 +198,7 @@ export interface FileRoutesByFullPath {
   '/notifications': typeof NotificationsRoute
   '/onboarding': typeof OnboardingRoute
   '/otp': typeof OtpRoute
+  '/payment-pending': typeof PaymentPendingRoute
   '/privacy': typeof PrivacyRoute
   '/profile': typeof ProfileRoute
   '/refer': typeof ReferRoute
@@ -194,6 +208,7 @@ export interface FileRoutesByFullPath {
   '/terms': typeof TermsRoute
   '/tv': typeof TvRoute
   '/wallet': typeof WalletRoute
+  '/api/public/paystack-webhook': typeof ApiPublicPaystackWebhookRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -213,6 +228,7 @@ export interface FileRoutesByTo {
   '/notifications': typeof NotificationsRoute
   '/onboarding': typeof OnboardingRoute
   '/otp': typeof OtpRoute
+  '/payment-pending': typeof PaymentPendingRoute
   '/privacy': typeof PrivacyRoute
   '/profile': typeof ProfileRoute
   '/refer': typeof ReferRoute
@@ -222,6 +238,7 @@ export interface FileRoutesByTo {
   '/terms': typeof TermsRoute
   '/tv': typeof TvRoute
   '/wallet': typeof WalletRoute
+  '/api/public/paystack-webhook': typeof ApiPublicPaystackWebhookRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -242,6 +259,7 @@ export interface FileRoutesById {
   '/notifications': typeof NotificationsRoute
   '/onboarding': typeof OnboardingRoute
   '/otp': typeof OtpRoute
+  '/payment-pending': typeof PaymentPendingRoute
   '/privacy': typeof PrivacyRoute
   '/profile': typeof ProfileRoute
   '/refer': typeof ReferRoute
@@ -251,6 +269,7 @@ export interface FileRoutesById {
   '/terms': typeof TermsRoute
   '/tv': typeof TvRoute
   '/wallet': typeof WalletRoute
+  '/api/public/paystack-webhook': typeof ApiPublicPaystackWebhookRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -272,6 +291,7 @@ export interface FileRouteTypes {
     | '/notifications'
     | '/onboarding'
     | '/otp'
+    | '/payment-pending'
     | '/privacy'
     | '/profile'
     | '/refer'
@@ -281,6 +301,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/tv'
     | '/wallet'
+    | '/api/public/paystack-webhook'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -300,6 +321,7 @@ export interface FileRouteTypes {
     | '/notifications'
     | '/onboarding'
     | '/otp'
+    | '/payment-pending'
     | '/privacy'
     | '/profile'
     | '/refer'
@@ -309,6 +331,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/tv'
     | '/wallet'
+    | '/api/public/paystack-webhook'
   id:
     | '__root__'
     | '/'
@@ -328,6 +351,7 @@ export interface FileRouteTypes {
     | '/notifications'
     | '/onboarding'
     | '/otp'
+    | '/payment-pending'
     | '/privacy'
     | '/profile'
     | '/refer'
@@ -337,6 +361,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/tv'
     | '/wallet'
+    | '/api/public/paystack-webhook'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -357,6 +382,7 @@ export interface RootRouteChildren {
   NotificationsRoute: typeof NotificationsRoute
   OnboardingRoute: typeof OnboardingRoute
   OtpRoute: typeof OtpRoute
+  PaymentPendingRoute: typeof PaymentPendingRoute
   PrivacyRoute: typeof PrivacyRoute
   ProfileRoute: typeof ProfileRoute
   ReferRoute: typeof ReferRoute
@@ -366,6 +392,7 @@ export interface RootRouteChildren {
   TermsRoute: typeof TermsRoute
   TvRoute: typeof TvRoute
   WalletRoute: typeof WalletRoute
+  ApiPublicPaystackWebhookRoute: typeof ApiPublicPaystackWebhookRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -431,6 +458,13 @@ declare module '@tanstack/react-router' {
       path: '/privacy'
       fullPath: '/privacy'
       preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/payment-pending': {
+      id: '/payment-pending'
+      path: '/payment-pending'
+      fullPath: '/payment-pending'
+      preLoaderRoute: typeof PaymentPendingRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/otp': {
@@ -552,6 +586,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/paystack-webhook': {
+      id: '/api/public/paystack-webhook'
+      path: '/api/public/paystack-webhook'
+      fullPath: '/api/public/paystack-webhook'
+      preLoaderRoute: typeof ApiPublicPaystackWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -573,6 +614,7 @@ const rootRouteChildren: RootRouteChildren = {
   NotificationsRoute: NotificationsRoute,
   OnboardingRoute: OnboardingRoute,
   OtpRoute: OtpRoute,
+  PaymentPendingRoute: PaymentPendingRoute,
   PrivacyRoute: PrivacyRoute,
   ProfileRoute: ProfileRoute,
   ReferRoute: ReferRoute,
@@ -582,6 +624,7 @@ const rootRouteChildren: RootRouteChildren = {
   TermsRoute: TermsRoute,
   TvRoute: TvRoute,
   WalletRoute: WalletRoute,
+  ApiPublicPaystackWebhookRoute: ApiPublicPaystackWebhookRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
