@@ -18,6 +18,7 @@ import { Route as ServicesRouteImport } from './routes/services'
 import { Route as ReferRouteImport } from './routes/refer'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as PaymentPendingRouteImport } from './routes/payment-pending'
 import { Route as OtpRouteImport } from './routes/otp'
 import { Route as OnboardingRouteImport } from './routes/onboarding'
 import { Route as NotificationsRouteImport } from './routes/notifications'
@@ -80,6 +81,11 @@ const ProfileRoute = ProfileRouteImport.update({
 const PrivacyRoute = PrivacyRouteImport.update({
   id: '/privacy',
   path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PaymentPendingRoute = PaymentPendingRouteImport.update({
+  id: '/payment-pending',
+  path: '/payment-pending',
   getParentRoute: () => rootRouteImport,
 } as any)
 const OtpRoute = OtpRouteImport.update({
@@ -192,6 +198,7 @@ export interface FileRoutesByFullPath {
   '/notifications': typeof NotificationsRoute
   '/onboarding': typeof OnboardingRoute
   '/otp': typeof OtpRoute
+  '/payment-pending': typeof PaymentPendingRoute
   '/privacy': typeof PrivacyRoute
   '/profile': typeof ProfileRoute
   '/refer': typeof ReferRoute
@@ -221,6 +228,7 @@ export interface FileRoutesByTo {
   '/notifications': typeof NotificationsRoute
   '/onboarding': typeof OnboardingRoute
   '/otp': typeof OtpRoute
+  '/payment-pending': typeof PaymentPendingRoute
   '/privacy': typeof PrivacyRoute
   '/profile': typeof ProfileRoute
   '/refer': typeof ReferRoute
@@ -251,6 +259,7 @@ export interface FileRoutesById {
   '/notifications': typeof NotificationsRoute
   '/onboarding': typeof OnboardingRoute
   '/otp': typeof OtpRoute
+  '/payment-pending': typeof PaymentPendingRoute
   '/privacy': typeof PrivacyRoute
   '/profile': typeof ProfileRoute
   '/refer': typeof ReferRoute
@@ -282,6 +291,7 @@ export interface FileRouteTypes {
     | '/notifications'
     | '/onboarding'
     | '/otp'
+    | '/payment-pending'
     | '/privacy'
     | '/profile'
     | '/refer'
@@ -311,6 +321,7 @@ export interface FileRouteTypes {
     | '/notifications'
     | '/onboarding'
     | '/otp'
+    | '/payment-pending'
     | '/privacy'
     | '/profile'
     | '/refer'
@@ -340,6 +351,7 @@ export interface FileRouteTypes {
     | '/notifications'
     | '/onboarding'
     | '/otp'
+    | '/payment-pending'
     | '/privacy'
     | '/profile'
     | '/refer'
@@ -370,6 +382,7 @@ export interface RootRouteChildren {
   NotificationsRoute: typeof NotificationsRoute
   OnboardingRoute: typeof OnboardingRoute
   OtpRoute: typeof OtpRoute
+  PaymentPendingRoute: typeof PaymentPendingRoute
   PrivacyRoute: typeof PrivacyRoute
   ProfileRoute: typeof ProfileRoute
   ReferRoute: typeof ReferRoute
@@ -445,6 +458,13 @@ declare module '@tanstack/react-router' {
       path: '/privacy'
       fullPath: '/privacy'
       preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/payment-pending': {
+      id: '/payment-pending'
+      path: '/payment-pending'
+      fullPath: '/payment-pending'
+      preLoaderRoute: typeof PaymentPendingRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/otp': {
@@ -594,6 +614,7 @@ const rootRouteChildren: RootRouteChildren = {
   NotificationsRoute: NotificationsRoute,
   OnboardingRoute: OnboardingRoute,
   OtpRoute: OtpRoute,
+  PaymentPendingRoute: PaymentPendingRoute,
   PrivacyRoute: PrivacyRoute,
   ProfileRoute: ProfileRoute,
   ReferRoute: ReferRoute,
