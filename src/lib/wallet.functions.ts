@@ -114,7 +114,7 @@ export const getFundingStatus = createServerFn({ method: "GET" })
       // verification unavailable — keep current status; poller will retry
     }
 
-    const kind = (verifiedMeta?.kind as string | undefined) ?? "wallet_funding";
+    const kind = verifiedMeta?.kind ?? "wallet_funding";
     return {
       reference: row.paystack_reference,
       amount: Number(row.amount),
@@ -124,7 +124,6 @@ export const getFundingStatus = createServerFn({ method: "GET" })
       createdAt: row.created_at as string,
       // Receipt details derived from Paystack's verified metadata, not client state.
       type: kind,
-      description: kind === "wallet_funding" ? "Wallet Funding" : kind,
-      metadata: verifiedMeta ?? null,
+      description: kind === "wallet_funding" ? "Wallet Funding" : (verifiedMeta?.description ?? kind),
     };
   });
