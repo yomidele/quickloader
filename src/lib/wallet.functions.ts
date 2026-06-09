@@ -80,7 +80,7 @@ export const getFundingStatus = createServerFn({ method: "GET" })
 
     // ALWAYS verify with Paystack as the source of truth before reporting success —
     // defence-in-depth against tampered client state or stale DB rows.
-    let verifiedMeta: Record<string, unknown> | undefined;
+    let verifiedMeta: { kind?: string; description?: string; userId?: string; amount?: number } | undefined;
     try {
       const { verifyPaystackTransaction } = await import("@/lib/paystack.server");
       const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
@@ -88,7 +88,7 @@ export const getFundingStatus = createServerFn({ method: "GET" })
         status: string;
         amount: number;
         reference: string;
-        metadata?: Record<string, unknown>;
+        metadata?: { kind?: string; description?: string; userId?: string; amount?: number };
       };
       verifiedMeta = verified.metadata;
 
