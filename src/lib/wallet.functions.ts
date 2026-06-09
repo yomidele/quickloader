@@ -78,32 +78,52 @@ export const getFundingStatus = createServerFn({ method: "GET" })
     if (error) throw new Error(error.message);
     if (!row) throw new Error("Funding not found");
 
-    // If still pending, ask Paystack directly in case the webhook is delayed.
-    if (row.status === "pending") {
-      try {
-        const { verifyPaystackTransaction } = await import("@/lib/paystack.server");
-        const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-        const verified = await verifyPaystackTransaction(data.reference);
-        if (verified.status === "success" && verified.amount === Number(row.total_charged) * 100) {
+    // ALWAYS verify with Paystack as the source of truth before reporting success —
+    // defence-in-depth against tampered client state or stale DB rows.
+    let verifiedMeta: { kind?: string; description?: string; userId?: string; amount?: number } | undefined;
+    try {
+      const { verifyPaystackTransaction } = await import("@/lib/paystack.server");
+      const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+      const verified = (await verifyPaystackTransaction(data.reference)) as {
+        status: string;
+        amount: number;
+        reference: string;
+        metadata?: { kind?: string; description?: string; userId?: string; amount?: number };
+      };
+      verifiedMeta = verified.metadata;
+
+      const amountMatches = verified.amount === Number(row.total_charged) * 100;
+      if (verified.status === "success" && amountMatches) {
+        if (row.status !== "success") {
           await supabaseAdmin.rpc("credit_wallet_funding", { _reference: data.reference });
-          row.status = "success";
-        } else if (verified.status === "failed" || verified.status === "abandoned") {
+        }
+        row.status = "success";
+      } else if (verified.status === "failed" || verified.status === "abandoned") {
+        if (row.status !== "success") {
           await supabaseAdmin
             .from("wallet_fundings")
             .update({ status: "failed" })
             .eq("paystack_reference", data.reference);
           row.status = "failed";
         }
-      } catch {
-        // swallow — keep status as pending
+      } else if (verified.status === "success" && !amountMatches) {
+        // amount mismatch — never report success
+        row.status = "failed";
       }
+    } catch {
+      // verification unavailable — keep current status; poller will retry
     }
 
+    const kind = verifiedMeta?.kind ?? "wallet_funding";
     return {
       reference: row.paystack_reference,
       amount: Number(row.amount),
       fee: Number(row.fee),
       totalCharged: Number(row.total_charged),
       status: row.status as "pending" | "success" | "failed",
+      createdAt: row.created_at as string,
+      // Receipt details derived from Paystack's verified metadata, not client state.
+      type: kind,
+      description: kind === "wallet_funding" ? "Wallet Funding" : (verifiedMeta?.description ?? kind),
     };
   });
