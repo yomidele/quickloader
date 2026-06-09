@@ -55,7 +55,8 @@ function PaymentPending() {
         ) : error ? (
           <Failed message={(error as Error).message} onRetry={() => refetch()} />
         ) : data?.status === "success" ? (
-          <Success amount={data.amount} onContinue={() => navigate({ to: "/dashboard" })} />
+          <Success data={data} onContinue={() => navigate({ to: "/dashboard" })} />
+
         ) : data?.status === "failed" ? (
           <Failed
             message="Payment did not complete."
