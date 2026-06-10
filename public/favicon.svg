@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <!-- Rounded square background (green) -->
+  <rect x="10" y="10" width="180" height="180" rx="40" fill="#3dd66d"/>
+  
+  <!-- Inner white rounded square -->
+  <rect x="30" y="30" width="140" height="140" rx="25" fill="white"/>
+  
+  <!-- Lightning bolt (green) -->
+  <path d="M100 50 L140 110 L110 110 L140 160 L70 100 L95 100 Z" fill="#2ea859"/>
+</svg>

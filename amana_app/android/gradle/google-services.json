@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "220116272193",
+    "project_id": "android-app-3fd72",
+    "storage_bucket": "android-app-3fd72.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:220116272193:android:d5f3deeee34478153b72c0",
+        "android_client_info": {
+          "package_name": "com.amanamsrkets.AMANA"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDwfqqQMkWhPSMw3ug9PGA5ko9nkImQvmk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "@tanstack/react-router";
+import { useNavigate } from "react-router-dom";
 import type { User } from "@supabase/supabase-js";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -37,7 +37,7 @@ export function useRequireAuth() {
   const { user, loading } = useAuthUser();
   const navigate = useNavigate();
   useEffect(() => {
-    if (!loading && !user) navigate({ to: "/login", replace: true });
+    if (!loading && !user) navigate("/login", { replace: true });
   }, [loading, user, navigate]);
   return { user, loading };
 }
@@ -64,7 +64,7 @@ export function useSignOut() {
   return async () => {
     await supabase.auth.signOut();
     qc.clear();
-    navigate({ to: "/login", replace: true });
+    navigate("/login", { replace: true });
   };
 }
 

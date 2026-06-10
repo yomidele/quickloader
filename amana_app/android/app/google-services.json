@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "74451662375",
+    "project_id": "android-app-14bfe",
+    "storage_bucket": "android-app-14bfe.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:74451662375:android:301f3d96c538a6296e8002",
+        "android_client_info": {
+          "package_name": "com.example.amana_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAF9UMkgOcKNWWQ1TdditsAy6I1iJDrvbw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:74451662375:android:1f4c3b0e62ee74836e8002",
+        "android_client_info": {
+          "package_name": "com.example.my_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAF9UMkgOcKNWWQ1TdditsAy6I1iJDrvbw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,4 +1,3 @@
-import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import {
   listDataPlans,
@@ -10,18 +9,12 @@ import {
 const networkSchema = z.enum(["mtn", "glo", "airtel", "9mobile"]);
 const cableSchema = z.enum(["dstv", "gotv", "startimes"]);
 
-export const getDataPlans = createServerFn({ method: "GET" })
-  .inputValidator((input: { network?: string } | undefined) =>
-    z.object({ network: networkSchema.optional() }).parse(input ?? {}),
-  )
-  .handler(async ({ data }): Promise<{ plans: DataPlan[] }> => {
-    return { plans: listDataPlans(data.network) };
-  });
+export async function getDataPlans(input: { network?: string } | undefined = {}): Promise<{ plans: DataPlan[] }> {
+  const data = z.object({ network: networkSchema.optional() }).parse(input ?? {});
+  return { plans: listDataPlans(data.network) };
+}
 
-export const getCablePlans = createServerFn({ method: "GET" })
-  .inputValidator((input: { provider?: string } | undefined) =>
-    z.object({ provider: cableSchema.optional() }).parse(input ?? {}),
-  )
-  .handler(async ({ data }): Promise<{ plans: CablePlan[] }> => {
-    return { plans: listCablePlans(data.provider) };
-  });
+export async function getCablePlans(input: { provider?: string } | undefined = {}): Promise<{ plans: CablePlan[] }> {
+  const data = z.object({ provider: cableSchema.optional() }).parse(input ?? {});
+  return { plans: listCablePlans(data.provider) };
+}
