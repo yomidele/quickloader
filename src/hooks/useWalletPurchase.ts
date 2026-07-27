@@ -1,5 +1,11 @@
 import { useCallback, useState } from 'react';
 import { useAuth } from './useAuth';
+import { supabase } from '@/integrations/supabase/client';
+
+async function getIdToken(): Promise<string> {
+  const { data } = await supabase.auth.getSession();
+  return data.session?.access_token ?? '';
+}
 
 export interface PurchaseResult {
   success: boolean;
