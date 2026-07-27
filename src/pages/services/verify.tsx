@@ -4,6 +4,12 @@ import { useRequireAuth } from "@/lib/auth";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { formatNaira } from "@/lib/quickload";
+import { supabase } from "@/integrations/supabase/client";
+
+async function getIdToken(): Promise<string> {
+  const { data } = await supabase.auth.getSession();
+  return data.session?.access_token ?? '';
+}
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 
@@ -31,7 +37,7 @@ export default function ServiceVerifyPage({ serviceType }: { serviceType: 'airti
 
     async function verify() {
       try {
-        const token = await user!.getIdToken();
+        const token = await getIdToken();
         const response = await fetch(`${API_URL}/api/services/${serviceType}/verify?reference=${reference}`, {
           headers: {
             'Authorization': `Bearer ${token}`,

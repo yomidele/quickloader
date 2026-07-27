@@ -3,6 +3,12 @@ import { useSearchParams, useNavigate } from "react-router-dom";
 import { Loader2 } from "lucide-react";
 import { useRequireAuth } from "@/lib/auth";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
+
+async function getIdToken(): Promise<string> {
+  const { data } = await supabase.auth.getSession();
+  return data.session?.access_token ?? '';
+}
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 
@@ -22,7 +28,7 @@ export default function WalletVerifyPage() {
 
     async function verify() {
       try {
-        const token = await user!.getIdToken();
+        const token = await getIdToken();
         const response = await fetch(`${API_URL}/api/wallet/verify?reference=${reference}`, {
           headers: {
             'Authorization': `Bearer ${token}`,

@@ -38,7 +38,15 @@ function History() {
           .order("created_at", { ascending: false });
 
         if (error) throw error;
-        setTransactions(data || []);
+        const mapped: Transaction[] = (data || []).map((t: any) => ({
+          id: t.id,
+          service_type: t.service_type ?? t.type ?? "unknown",
+          amount: Number(t.charged_price ?? 0),
+          status: (t.status ?? "pending") as Transaction["status"],
+          created_at: t.created_at,
+          metadata: (t.metadata as Record<string, any>) ?? {},
+        }));
+        setTransactions(mapped);
       } catch (err) {
         console.error("Failed to fetch transactions:", err);
       } finally {

@@ -8,6 +8,12 @@ import { transactions, formatNaira } from "@/lib/quickload";
 import { useProfile, useRequireAuth } from "@/lib/auth";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
+
+async function getIdToken(): Promise<string> {
+  const { data } = await supabase.auth.getSession();
+  return data.session?.access_token ?? '';
+}
 
 // Configuration constants
 const FUNDING_FEE = 50; // Fixed fee in Naira
@@ -67,7 +73,7 @@ export default function WalletPage() {
     if (!amt || amt < MIN_FUND) return toast.error(`Minimum funding amount is ₦${MIN_FUND}`);
     setSubmitting(true);
     try {
-      const token = await user!.getIdToken();
+      const token = await getIdToken();
       const res = await startFunding(token, amt);
       // Store the amount for display on success page
       localStorage.setItem("pending_funding_amount", String(amt));

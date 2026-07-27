@@ -28,7 +28,7 @@ function TV() {
 
   const { data, isLoading, isError, refetch } = useQuery({
     queryKey: ["cable-plans", provider],
-    queryFn: () => getCablePlans({ data: { provider } }),
+    queryFn: () => getCablePlans({ provider }),
     staleTime: 5 * 60 * 1000,
   });
 
