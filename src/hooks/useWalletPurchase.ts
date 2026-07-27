@@ -40,7 +40,7 @@ export function useWalletPurchase(serviceType: 'airtime' | 'data' | 'dstv' | 'el
       setLoading(true);
       setError(null);
 
-      const token = await user.getIdToken();
+      const token = await getIdToken();
       const response = await fetch(`${API_URL}/api/services/${serviceType}/balance`, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -82,7 +82,7 @@ export function useWalletPurchase(serviceType: 'airtime' | 'data' | 'dstv' | 'el
         setLoading(true);
         setError(null);
 
-        const token = await user.getIdToken();
+        const token = await getIdToken();
 
         const response = await fetch(`${API_URL}/api/services/${serviceType}/purchase`, {
           method: 'POST',

@@ -31,7 +31,7 @@ export default function ServiceVerifyPage({ serviceType }: { serviceType: 'airti
 
     async function verify() {
       try {
-        const token = await user!.getIdToken();
+        const token = await getIdToken();
         const response = await fetch(`${API_URL}/api/services/${serviceType}/verify?reference=${reference}`, {
           headers: {
             'Authorization': `Bearer ${token}`,

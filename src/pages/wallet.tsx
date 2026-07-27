@@ -67,7 +67,7 @@ export default function WalletPage() {
     if (!amt || amt < MIN_FUND) return toast.error(`Minimum funding amount is ₦${MIN_FUND}`);
     setSubmitting(true);
     try {
-      const token = await user!.getIdToken();
+      const token = await getIdToken();
       const res = await startFunding(token, amt);
       // Store the amount for display on success page
       localStorage.setItem("pending_funding_amount", String(amt));
