@@ -3,6 +3,12 @@ import { useSearchParams, useNavigate } from "react-router-dom";
 import { Loader2 } from "lucide-react";
 import { useRequireAuth } from "@/lib/auth";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
+
+async function getIdToken(): Promise<string> {
+  const { data } = await supabase.auth.getSession();
+  return data.session?.access_token ?? '';
+}
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 
