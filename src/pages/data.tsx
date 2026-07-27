@@ -27,7 +27,7 @@ function Data() {
 
   const { data, isLoading, isError, refetch } = useQuery({
     queryKey: ["data-plans", net],
-    queryFn: () => getDataPlans({ data: { network: net } }),
+    queryFn: () => getDataPlans({ network: net }),
     staleTime: 5 * 60 * 1000,
   });
 
