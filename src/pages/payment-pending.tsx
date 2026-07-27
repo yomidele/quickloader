@@ -25,9 +25,11 @@ export default function PaymentPending() {
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["funding-status", reference],
     enabled: !!reference,
-    queryFn: () => fetchStatus({ data: { reference: reference! } }),
+    queryFn: async () => {
+      throw new Error("Funding status API endpoint not configured.");
+    },
     refetchInterval: (q) => {
-      const s = q.state.data?.status;
+      const s = (q.state.data as any)?.status;
       return s === "success" || s === "failed" ? false : 5000;
     },
   });
