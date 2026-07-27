@@ -8,6 +8,12 @@ import { transactions, formatNaira } from "@/lib/quickload";
 import { useProfile, useRequireAuth } from "@/lib/auth";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
+
+async function getIdToken(): Promise<string> {
+  const { data } = await supabase.auth.getSession();
+  return data.session?.access_token ?? '';
+}
 
 // Configuration constants
 const FUNDING_FEE = 50; // Fixed fee in Naira
