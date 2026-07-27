@@ -4,6 +4,12 @@ import { useRequireAuth } from "@/lib/auth";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { formatNaira } from "@/lib/quickload";
+import { supabase } from "@/integrations/supabase/client";
+
+async function getIdToken(): Promise<string> {
+  const { data } = await supabase.auth.getSession();
+  return data.session?.access_token ?? '';
+}
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 
