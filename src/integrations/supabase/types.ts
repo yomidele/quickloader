@@ -54,6 +54,7 @@ export type Database = {
           metadata: Json | null
           platform_profit: number | null
           reference: string | null
+          service_type: string | null
           status: string
           type: string
           updated_at: string
@@ -68,6 +69,7 @@ export type Database = {
           metadata?: Json | null
           platform_profit?: number | null
           reference?: string | null
+          service_type?: string | null
           status?: string
           type: string
           updated_at?: string
@@ -82,6 +84,7 @@ export type Database = {
           metadata?: Json | null
           platform_profit?: number | null
           reference?: string | null
+          service_type?: string | null
           status?: string
           type?: string
           updated_at?: string
