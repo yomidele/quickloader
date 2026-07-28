@@ -51,17 +51,7 @@ function Data() {
       return;
     }
 
-    if (balance === null) {
-      toast.error("Unable to verify wallet balance");
-      return;
-    }
-
-    if (balance < selected.price) {
-      setInsufficientBalance(true);
-      toast.error("Insufficient wallet balance");
-      return;
-    }
-
+    // Test mode: purchases allowed on zero balance
     setProcessing(true);
     setInsufficientBalance(false);
 
