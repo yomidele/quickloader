@@ -15,9 +15,8 @@ export interface OgdamsDataPlan {
 export async function getDataPlans(
   input: { network?: string } = {},
 ): Promise<{ plans: OgdamsDataPlan[] }> {
-  const query = input.network ? `?network=${encodeURIComponent(input.network)}` : "";
-  const { data, error } = await supabase.functions.invoke(`ogdams-data-plans${query}`, {
-    method: "GET",
+  const { data, error } = await supabase.functions.invoke("ogdams-data-plans", {
+    body: { network: input.network },
   });
   if (error) throw new Error(error.message || "Failed to fetch data plans");
   return { plans: (data?.plans ?? []) as OgdamsDataPlan[] };

@@ -25,7 +25,13 @@ Deno.serve(async (req) => {
     }
 
     const url = new URL(req.url);
-    const networkParam = (url.searchParams.get('network') || '').toLowerCase();
+    let networkParam = (url.searchParams.get('network') || '').toLowerCase();
+    if (!networkParam && req.method === 'POST') {
+      try {
+        const body = await req.json();
+        networkParam = String(body?.network || '').toLowerCase();
+      } catch { /* ignore */ }
+    }
     const wantedNetworkId = NETWORK_ID[networkParam];
 
     const res = await fetch('https://simhosting.ogdams.ng/api/v4/get/data/plans', {
