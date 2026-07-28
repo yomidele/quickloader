@@ -266,7 +266,7 @@ function Data() {
 
           <button
             onClick={handlePurchase}
-            disabled={!selected || processing || checkingBalance || balance === null || insufficientBalance}
+            disabled={!selected || processing}
             className="w-full gradient-primary text-primary-foreground rounded-full py-4 text-sm font-semibold shadow-glow active:scale-[0.98] disabled:opacity-50 flex items-center justify-center gap-2"
           >
             {processing ? (
