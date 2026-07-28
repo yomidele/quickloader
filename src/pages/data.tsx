@@ -6,7 +6,7 @@ import { PageHeader } from "@/components/PageHeader";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useRequireAuth } from "@/lib/auth";
 import { networks } from "@/lib/quickload";
-import { getDataPlans } from "@/lib/cheapdatahub.functions";
+import { getDataPlans } from "@/lib/ogdams.functions";
 import { toast } from "sonner";
 import { useWalletPurchase } from "@/hooks/useWalletPurchase";
 
@@ -188,7 +188,7 @@ function Data() {
           <div>
             <div className="flex items-center justify-between mb-2">
               <p className="text-xs font-medium text-muted-foreground">Select Plan</p>
-              <p className="text-[10px] text-muted-foreground">Live pricing · CheapDataHub</p>
+              <p className="text-[10px] text-muted-foreground">Live pricing · Ogdams</p>
             </div>
 
             {isLoading && (
