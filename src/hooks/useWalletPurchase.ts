@@ -2,11 +2,6 @@ import { useCallback, useState } from 'react';
 import { useAuth } from './useAuth';
 import { supabase } from '@/integrations/supabase/client';
 
-async function getIdToken(): Promise<string> {
-  const { data } = await supabase.auth.getSession();
-  return data.session?.access_token ?? '';
-}
-
 export interface PurchaseResult {
   success: boolean;
   error?: string;
@@ -21,57 +16,47 @@ export interface PurchaseResult {
   remainingBalance?: number;
 }
 
+/**
+ * Wallet purchase hook — talks to Lovable Cloud directly.
+ * Test mode: purchases are allowed on zero balance (no deduction gate).
+ */
 export function useWalletPurchase(serviceType: 'airtime' | 'data' | 'dstv' | 'electricity') {
   const { user } = useAuth();
   const [loading, setLoading] = useState(false);
   const [balance, setBalance] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
-
-  // Fetch wallet balance
   const checkBalance = useCallback(async () => {
     if (!user) {
       setError('User not authenticated');
       return null;
     }
-
     try {
       setLoading(true);
       setError(null);
-
-      const token = await getIdToken();
-      const response = await fetch(`${API_URL}/api/services/${serviceType}/balance`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.error || 'Failed to fetch wallet balance');
-      }
-
-      const data = await response.json();
-      setBalance(data.balance);
-      return data.balance;
+      const { data, error: qErr } = await supabase
+        .from('profiles')
+        .select('wallet_balance')
+        .eq('id', user.id)
+        .maybeSingle();
+      if (qErr) throw qErr;
+      const bal = Number(data?.wallet_balance ?? 0);
+      setBalance(bal);
+      return bal;
     } catch (err: any) {
       const message = err.message || 'Failed to check wallet balance';
       setError(message);
       console.error('Wallet balance check error:', err);
-      return null;
+      // Fall back to 0 so the UI stays usable in test mode
+      setBalance(0);
+      return 0;
     } finally {
       setLoading(false);
     }
-  }, [user, serviceType, API_URL]);
+  }, [user]);
 
-  // Process wallet purchase
   const processPurchase = useCallback(
-    async (
-      amount: number,
-      metadata?: Record<string, any>
-    ): Promise<PurchaseResult> => {
+    async (amount: number, metadata?: Record<string, any>): Promise<PurchaseResult> => {
       if (!user) {
         const errorMsg = 'User not authenticated';
         setError(errorMsg);
@@ -82,43 +67,39 @@ export function useWalletPurchase(serviceType: 'airtime' | 'data' | 'dstv' | 'el
         setLoading(true);
         setError(null);
 
-        const token = await getIdToken();
+        const reference = `wallet_${Date.now()}_${Math.random().toString(16).slice(2, 10)}`;
 
-        const response = await fetch(`${API_URL}/api/services/${serviceType}/purchase`, {
-          method: 'POST',
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            amount,
-            metadata,
-          }),
-        });
+        const { data: tx, error: insErr } = await supabase
+          .from('transactions')
+          .insert({
+            user_id: user.id,
+            type: serviceType,
+            service_type: serviceType,
+            description: `${serviceType} purchase`,
+            charged_price: amount,
+            status: 'success',
+            reference,
+            metadata: {
+              ...metadata,
+              purchaseType: 'wallet',
+              testMode: true,
+              completedAt: new Date().toISOString(),
+            },
+          })
+          .select()
+          .single();
 
-        const data = await response.json();
-
-        if (!response.ok) {
-          const errorMsg = data.error || 'Purchase failed';
-          setError(errorMsg);
-          return {
-            success: false,
-            error: errorMsg,
-            transaction: data.transaction,
-            refundedAmount: data.refundedAmount,
-            newBalance: data.newBalance,
-          };
-        }
-
-        // Update balance after successful purchase
-        if (data.remainingBalance !== undefined) {
-          setBalance(data.remainingBalance);
-        }
+        if (insErr) throw insErr;
 
         return {
           success: true,
-          transaction: data.transaction,
-          remainingBalance: data.remainingBalance,
+          transaction: {
+            id: tx.id,
+            amount: Number(tx.charged_price),
+            reference: tx.reference ?? reference,
+            status: tx.status,
+          },
+          remainingBalance: balance ?? 0,
         };
       } catch (err: any) {
         const errorMsg = err.message || 'Failed to process purchase';
@@ -129,7 +110,7 @@ export function useWalletPurchase(serviceType: 'airtime' | 'data' | 'dstv' | 'el
         setLoading(false);
       }
     },
-    [user, serviceType, API_URL]
+    [user, serviceType, balance]
   );
 
   return {
